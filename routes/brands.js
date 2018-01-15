@@ -6,16 +6,16 @@ router.get('/', (req, res) => {
     companyStore.list((err, companies) => {
         if (err) throw err;
         res.json(companies.filter((company) => {
-          return company.company_type === "factory"}))
+          return company.company_type === "brand"}))
     });
 });
 
 router.get('/search', (req, res) => {
     const searchQuery = req.query.q;
-    let factoryArray = companyStore.list((err, factories) => {
+    let brandArray = companyStore.list((err, brands) => {
       if (err) throw err
-      let result = factories.find((factory) => {
-        return (factory.name === searchQuery && factory.company_type === "factory")})
+      let result = brands.find((brand) => {
+        return (brand.name === searchQuery && brand.company_type === "brand")})
       if (result) {
         res.json(result)
       } else {
@@ -25,23 +25,23 @@ router.get('/search', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    companyStore.load(req.params.id, (err, factory) => {
+    companyStore.load(req.params.id, (err, brand) => {
         if (err) throw err;
-        res.json(factory);
+        res.json(brand);
     });
 });
 
 router.post('/', (req, res) => {
     if (!req.body) return res.sendStatus(400);
-    const newFactory = { name: req.body.name, 
+    const newBrand = { name: req.body.name, 
     email: req.body.email,
     phone_number: req.body.phone_number,
     city: req.body.city,
     state: req.body.state,
     company_type: req.body.company_type};
-    companyStore.add(newFactory, err => {
+    companyStore.add(newBrand, err => {
         if (err) throw err;
-        res.json(newFactory);
+        res.json(newBrand);
     });
 });
 

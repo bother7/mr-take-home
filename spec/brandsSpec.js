@@ -1,8 +1,8 @@
 const request = require('supertest');
-// I'm doing this so i can delete the factory for the POST test during delete
+// I'm doing this so i can delete the brand for the POST test during delete
 const testID = {id: ""}
 
-describe('Factories', () => {
+describe('Brands', () => {
     let app;
     beforeEach(() => {
         app = require('../app.js');
@@ -11,9 +11,9 @@ describe('Factories', () => {
         app.close();
     });
 
-    it('gets all factories', done => {
+    it('gets all brands', done => {
         request(app)
-            .get('/factories')
+            .get('/brands')
             .expect(200)
             .end((err, res) => {
                 if (err) return done.fail(err);
@@ -22,9 +22,9 @@ describe('Factories', () => {
             });
     });
 
-    it('gets a single factory', done => {
+    it('gets a single brand', done => {
         request(app)
-            .get('/factories/0a75d3f4-c8ff-47bb-84c3-a874007d1b4f') // admittedly, this is an ugly id.
+            .get('/brands/8c9962cb-7806-4d19-9f06-80a0efb7e9ca') // admittedly, this is an ugly id.
             .expect(200)
             .end((err, res) => {
                 if (err) return done.fail(err);
@@ -33,29 +33,29 @@ describe('Factories', () => {
             });
     });
 
-    it('creates a new factory', done => {
+    it('creates a new brand', done => {
         request(app)
-            .post('/factories')
-            .send({ name: 'Test Factory',
+            .post('/brands')
+            .send({ name: 'Test Brand',
             email: "test",
             phone_number: "2",
             city: "New York",
             state: "NY",
-            company_type: "factory"})
+            company_type: "brand"})
             .expect(200)
             .end((err, res) => {
                 if (err) return done.fail(err);
-                // I'm doing this so i can delete this test factory during delete
+                // I'm doing this so i can delete this test brand during delete
                 testID.id = res.body.id
-                expect(res.body.name).toEqual('Test Factory');
+                expect(res.body.name).toEqual('Test Brand');
 
                 done(res);
             });
     });
 
-    it('finds an existing factory', done => {
+    it('finds an existing brand', done => {
         request(app)
-            .get('/factories/search?q=The Pattern Makers')
+            .get('/brands/search?q=Sample Brand 2')
             .expect(200)
             .end((err, res) => {
                 if (err) return done.fail(err);
@@ -64,9 +64,9 @@ describe('Factories', () => {
             });
     });
 
-    it('returns 404 when it can\'t find a factory', done => {
+    it('returns 404 when it can\'t find a brand', done => {
         request(app)
-            .get('/factories/search?q=foo bar')
+            .get('/brands/search?q=foo bar')
             .expect(404)
             .end((err, res) => {
                 if (err) return done.fail(err);
@@ -74,9 +74,9 @@ describe('Factories', () => {
             });
     });
     
-    it('deletes a factory', done => {
+    it('deletes a brand', done => {
         request(app)
-            .delete(`/factories/${testID.id}`) 
+            .delete(`/brands/${testID.id}`) 
             .expect(200)
             .end((err, res) => {
                 if (err) return done.fail(err);
